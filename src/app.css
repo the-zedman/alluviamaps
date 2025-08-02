@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-sediment-50 text-sediment-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-alluvia-600 hover:bg-alluvia-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-sediment-200 hover:bg-sediment-300 text-sediment-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-sediment-200 p-6;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-sediment-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-alluvia-500 focus:border-transparent;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-alluvia-600 to-alluvia-800 bg-clip-text text-transparent;
+  }
+} 
