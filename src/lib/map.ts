@@ -87,19 +87,29 @@ export function getMap(): mapboxgl.Map | null {
 
 // Add tracks layer
 export function addTracksLayer(tracks: Track[]) {
-  if (!map) return
+  console.log('🗺️ addTracksLayer called with tracks:', tracks.length, tracks)
+  
+  if (!map) {
+    console.warn('❌ Map not available for tracks layer')
+    return
+  }
 
   // Wait for map to be loaded before adding layers
   if (!map.isStyleLoaded()) {
+    console.log('⏳ Map style not loaded, waiting...')
     map.once('style.load', () => addTracksLayer(tracks))
     return
   }
 
+  console.log('✅ Map style loaded, adding tracks layer...')
+
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.TRACKS)) {
+    console.log('🗑️ Removing existing tracks layer')
     map.removeLayer(LAYER_IDS.TRACKS)
   }
   if (map.getSource(SOURCE_IDS.TRACKS)) {
+    console.log('🗑️ Removing existing tracks source')
     map.removeSource(SOURCE_IDS.TRACKS)
   }
 
@@ -123,6 +133,8 @@ export function addTracksLayer(tracks: Track[]) {
     }))
   }
 
+  console.log('📊 Tracks GeoJSON:', tracksGeoJSON)
+
   // Add source
   map.addSource(SOURCE_IDS.TRACKS, {
     type: 'geojson',
@@ -145,23 +157,35 @@ export function addTracksLayer(tracks: Track[]) {
       'line-opacity': 0.8
     }
   })
+
+  console.log('✅ Tracks layer added successfully')
 }
 
 // Add gold sites layer
 export function addGoldSitesLayer(goldSites: GoldSite[]) {
-  if (!map) return
+  console.log('🗺️ addGoldSitesLayer called with gold sites:', goldSites.length, goldSites)
+  
+  if (!map) {
+    console.warn('❌ Map not available for gold sites layer')
+    return
+  }
 
   // Wait for map to be loaded before adding layers
   if (!map.isStyleLoaded()) {
+    console.log('⏳ Map style not loaded, waiting...')
     map.once('style.load', () => addGoldSitesLayer(goldSites))
     return
   }
 
+  console.log('✅ Map style loaded, adding gold sites layer...')
+
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.GOLD_SITES_SYMBOL)) {
+    console.log('🗑️ Removing existing gold sites layer')
     map.removeLayer(LAYER_IDS.GOLD_SITES_SYMBOL)
   }
   if (map.getSource(SOURCE_IDS.GOLD_SITES)) {
+    console.log('🗑️ Removing existing gold sites source')
     map.removeSource(SOURCE_IDS.GOLD_SITES)
   }
 
@@ -179,11 +203,12 @@ export function addGoldSitesLayer(goldSites: GoldSite[]) {
         name: site.name,
         description: site.description,
         current_status: site.current_status,
-        gold_found: site.gold_found,
-        site_type: site.site_type
+        gold_found: site.gold_found
       }
     }))
   }
+
+  console.log('📊 Gold sites GeoJSON:', goldSitesGeoJSON)
 
   // Add source
   map.addSource(SOURCE_IDS.GOLD_SITES, {
@@ -215,6 +240,8 @@ export function addGoldSitesLayer(goldSites: GoldSite[]) {
       'text-halo-width': 1
     }
   })
+
+  console.log('✅ Gold sites layer added successfully')
 }
 
 // Toggle layer visibility
