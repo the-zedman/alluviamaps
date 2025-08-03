@@ -31,7 +31,15 @@ let map: mapboxgl.Map | null = null
 // Initialize map
 export function initializeMap(container: string | HTMLElement): mapboxgl.Map | null {
   // Set Mapbox token at runtime
-  const mapboxToken = import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN
+  let mapboxToken = import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN
+  
+  // Fallback: try different ways to access the token
+  if (!mapboxToken) {
+    mapboxToken = (window as any).PUBLIC_MAPBOX_ACCESS_TOKEN
+  }
+  
+  console.log('Mapbox token check:', mapboxToken ? 'Token found' : 'Token missing')
+  
   if (!mapboxToken) {
     console.warn('Mapbox access token not available')
     return null
