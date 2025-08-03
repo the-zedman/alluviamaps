@@ -14,6 +14,12 @@ export async function fetchTracks(useCache = true): Promise<Track[]> {
     return tracksCache
   }
 
+  // Return empty array if supabase is not available
+  if (!supabase) {
+    console.warn('Supabase client not available')
+    return []
+  }
+
   try {
     const { data, error } = await supabase
       .from('tracks')
@@ -40,6 +46,12 @@ export async function fetchGoldSites(useCache = true): Promise<GoldSite[]> {
   // Return cached data if available and fresh
   if (useCache && goldSitesCache && Date.now() - lastFetch < CACHE_DURATION) {
     return goldSitesCache
+  }
+
+  // Return empty array if supabase is not available
+  if (!supabase) {
+    console.warn('Supabase client not available')
+    return []
   }
 
   try {

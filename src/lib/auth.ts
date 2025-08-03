@@ -8,6 +8,12 @@ export const loading = writable(true)
 
 // Initialize auth state
 export async function initializeAuth() {
+  if (!supabase) {
+    console.warn('Supabase client not available')
+    loading.set(false)
+    return
+  }
+
   try {
     // Get initial session
     const { data: { session } } = await supabase.auth.getSession()
@@ -24,6 +30,11 @@ export async function initializeAuth() {
 
 // Load user profile from database
 async function loadUserProfile(supabaseUser: SupabaseUser) {
+  if (!supabase) {
+    console.warn('Supabase client not available')
+    return
+  }
+
   try {
     const { data, error } = await supabase
       .from('users')
