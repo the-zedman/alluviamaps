@@ -34,8 +34,16 @@ export function initializeMap(container: string | HTMLElement): mapboxgl.Map | n
   console.log('All import.meta.env keys:', Object.keys(import.meta.env))
   console.log('PUBLIC_MAPBOX_ACCESS_TOKEN value:', import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN)
   
-  // Set Mapbox token at runtime - temporarily hardcoded for testing
-  const mapboxToken = import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN || 'pk.eyJ1IjoiemVkbWFuIiwiYSI6ImNtZHYxdWtxczBxYTQybHBsZmY1b3ViZm0ifQ.z3FPyxaZAsejHhtypPjHsw'
+  // Try multiple ways to get the token
+  let mapboxToken = import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN
+  
+  // Fallback to hardcoded token for now
+  if (!mapboxToken) {
+    mapboxToken = 'pk.eyJ1IjoiemVkbWFuIiwiYSI6ImNtZHYxdWtxczBxYTQybHBsZmY1b3ViZm0ifQ.z3FPyxaZAsejHhtypPjHsw'
+    console.log('Using fallback token - environment variable not loaded')
+  } else {
+    console.log('Using environment variable token')
+  }
   
   console.log('Mapbox token check:', mapboxToken ? 'Token found' : 'Token missing')
   
