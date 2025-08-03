@@ -55,6 +55,10 @@ async function loadUserProfile(supabaseUser: SupabaseUser) {
 
 // Sign up
 export async function signUp(email: string, password: string) {
+  if (!supabase) {
+    return { data: null, error: new Error('Supabase client not available') }
+  }
+
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -86,6 +90,10 @@ export async function signUp(email: string, password: string) {
 
 // Sign in
 export async function signIn(email: string, password: string) {
+  if (!supabase) {
+    return { data: null, error: new Error('Supabase client not available') }
+  }
+
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -106,6 +114,10 @@ export async function signIn(email: string, password: string) {
 
 // Sign out
 export async function signOut() {
+  if (!supabase) {
+    return { error: new Error('Supabase client not available') }
+  }
+
   try {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
@@ -118,10 +130,12 @@ export async function signOut() {
 }
 
 // Listen for auth changes
-supabase.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'SIGNED_IN' && session?.user) {
-    await loadUserProfile(session.user)
-  } else if (event === 'SIGNED_OUT') {
-    user.set(null)
-  }
-}) 
+if (supabase) {
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) {
+      await loadUserProfile(session.user)
+    } else if (event === 'SIGNED_OUT') {
+      user.set(null)
+    }
+  })
+} 
