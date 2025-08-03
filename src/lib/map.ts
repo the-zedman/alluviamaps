@@ -94,14 +94,22 @@ export function addTracksLayer(tracks: Track[]) {
     return
   }
 
-  // Wait for map to be loaded before adding layers
-  if (!map.isStyleLoaded()) {
+  // Check if map style is already loaded
+  if (map.isStyleLoaded()) {
+    console.log('✅ Map style already loaded, adding tracks layer...')
+    addTracksLayerInternal(tracks)
+  } else {
     console.log('⏳ Map style not loaded, waiting...')
-    map.once('style.load', () => addTracksLayer(tracks))
-    return
+    map.once('style.load', () => {
+      console.log('✅ Map style loaded, adding tracks layer...')
+      addTracksLayerInternal(tracks)
+    })
   }
+}
 
-  console.log('✅ Map style loaded, adding tracks layer...')
+// Internal function to add tracks layer (called after style is loaded)
+function addTracksLayerInternal(tracks: Track[]) {
+  if (!map) return
 
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.TRACKS)) {
@@ -115,11 +123,11 @@ export function addTracksLayer(tracks: Track[]) {
 
   // Convert tracks to GeoJSON
   const tracksGeoJSON = {
-    type: 'FeatureCollection',
+    type: 'FeatureCollection' as const,
     features: tracks.map(track => ({
-      type: 'Feature',
+      type: 'Feature' as const,
       geometry: {
-        type: 'LineString',
+        type: 'LineString' as const,
         coordinates: track.coordinates
       },
       properties: {
@@ -170,14 +178,22 @@ export function addGoldSitesLayer(goldSites: GoldSite[]) {
     return
   }
 
-  // Wait for map to be loaded before adding layers
-  if (!map.isStyleLoaded()) {
+  // Check if map style is already loaded
+  if (map.isStyleLoaded()) {
+    console.log('✅ Map style already loaded, adding gold sites layer...')
+    addGoldSitesLayerInternal(goldSites)
+  } else {
     console.log('⏳ Map style not loaded, waiting...')
-    map.once('style.load', () => addGoldSitesLayer(goldSites))
-    return
+    map.once('style.load', () => {
+      console.log('✅ Map style loaded, adding gold sites layer...')
+      addGoldSitesLayerInternal(goldSites)
+    })
   }
+}
 
-  console.log('✅ Map style loaded, adding gold sites layer...')
+// Internal function to add gold sites layer (called after style is loaded)
+function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
+  if (!map) return
 
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.GOLD_SITES_SYMBOL)) {
@@ -191,11 +207,11 @@ export function addGoldSitesLayer(goldSites: GoldSite[]) {
 
   // Convert gold sites to GeoJSON
   const goldSitesGeoJSON = {
-    type: 'FeatureCollection',
+    type: 'FeatureCollection' as const,
     features: goldSites.map(site => ({
-      type: 'Feature',
+      type: 'Feature' as const,
       geometry: {
-        type: 'Point',
+        type: 'Point' as const,
         coordinates: site.coordinates
       },
       properties: {
