@@ -31,7 +31,7 @@
 
 <svelte:head>
 	<title>AlluviaMaps - Discover Hidden Tracks & Historical Mining Sites</title>
-	<!-- Force redeploy -->
+	<!-- Force redeploy - Mapbox token test -->
 </svelte:head>
 
 <!-- Map-First Landing Page -->
