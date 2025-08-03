@@ -3,11 +3,9 @@ import type { Track, GoldSite } from './supabase'
 
 // Initialize Mapbox
 const mapboxToken = import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN
-if (!mapboxToken) {
-  throw new Error('Missing Mapbox access token')
+if (mapboxToken) {
+  mapboxgl.accessToken = mapboxToken
 }
-
-mapboxgl.accessToken = mapboxToken
 
 // Map configuration
 export const MAP_CONFIG = {
@@ -35,7 +33,12 @@ export const SOURCE_IDS = {
 let map: mapboxgl.Map | null = null
 
 // Initialize map
-export function initializeMap(container: string | HTMLElement): mapboxgl.Map {
+export function initializeMap(container: string | HTMLElement): mapboxgl.Map | null {
+  if (!mapboxgl.accessToken) {
+    console.warn('Mapbox access token not available')
+    return null
+  }
+
   if (map) {
     map.remove()
   }

@@ -35,18 +35,20 @@
     if (mapContainer) {
       map = initializeMap(mapContainer)
       
-      // Add initial data if available
-      if (tracks.length > 0 && showTracks) {
-        addTracksLayer(tracks)
-      }
-      
-      if (goldSites.length > 0 && showGoldSites) {
-        addGoldSitesLayer(goldSites)
-      }
+      if (map) {
+        // Add initial data if available
+        if (tracks.length > 0 && showTracks) {
+          addTracksLayer(tracks)
+        }
+        
+        if (goldSites.length > 0 && showGoldSites) {
+          addGoldSitesLayer(goldSites)
+        }
 
-      // Fly to center if provided
-      if (center) {
-        flyToLocation(center, zoom)
+        // Fly to center if provided
+        if (center) {
+          flyToLocation(center, zoom)
+        }
       }
     }
   })
