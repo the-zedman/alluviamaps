@@ -114,4 +114,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 - Project Link: [https://github.com/the-zedman/alluviamaps](https://github.com/the-zedman/alluviamaps)
-- Website: [https://alluviamaps.com](https://alluviamaps.com) (coming soon) 
+- Website: [https://alluviamaps.com](https://alluviamaps.com) (coming soon) .

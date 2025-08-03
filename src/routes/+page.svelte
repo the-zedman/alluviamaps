@@ -13,18 +13,24 @@
 
 	onMount(async () => {
 		try {
+			console.log('🔍 Starting data fetch...')
+			
 			// Fetch data from Supabase
 			const [tracksData, goldSitesData] = await Promise.all([
 				fetchTracks(),
 				fetchGoldSites()
 			])
 			
+			console.log('📊 Fetched tracks:', tracksData.length, tracksData)
+			console.log('📊 Fetched gold sites:', goldSitesData.length, goldSitesData)
+			
 			tracks = tracksData
 			goldSites = goldSitesData
 		} catch (error) {
-			console.error('Error loading data:', error)
+			console.error('❌ Error loading data:', error)
 		} finally {
 			loading = false
+			console.log('✅ Data loading complete')
 		}
 	})
 </script>
