@@ -1,7 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
-	export let data: PageData;
+	// Page component for AlluviaMaps homepage
 </script>
 
 <svelte:head>
