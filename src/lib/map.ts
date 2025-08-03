@@ -1,11 +1,7 @@
 import mapboxgl from 'mapbox-gl'
 import type { Track, GoldSite } from './supabase'
 
-// Initialize Mapbox
-const mapboxToken = import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN
-if (mapboxToken) {
-  mapboxgl.accessToken = mapboxToken
-}
+// Initialize Mapbox - will be set in initializeMap function
 
 // Map configuration
 export const MAP_CONFIG = {
@@ -34,10 +30,14 @@ let map: mapboxgl.Map | null = null
 
 // Initialize map
 export function initializeMap(container: string | HTMLElement): mapboxgl.Map | null {
-  if (!mapboxgl.accessToken) {
+  // Set Mapbox token at runtime
+  const mapboxToken = import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN
+  if (!mapboxToken) {
     console.warn('Mapbox access token not available')
     return null
   }
+  
+  mapboxgl.accessToken = mapboxToken
 
   if (map) {
     map.remove()

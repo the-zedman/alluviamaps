@@ -14,6 +14,7 @@
 
   let mapContainer: HTMLDivElement
   let map: any
+  let mapError = false
 
   // Layer visibility
   $: if (map) {
@@ -49,6 +50,9 @@
         if (center) {
           flyToLocation(center, zoom)
         }
+      } else {
+        mapError = true
+        console.error('Failed to initialize map - Mapbox token may be missing')
       }
     }
   })
@@ -77,7 +81,21 @@
   role="application"
   aria-label="Interactive map showing tracks and gold sites"
 >
-  <!-- Map will be rendered here -->
+  {#if mapError}
+    <div class="flex items-center justify-center h-full bg-sediment-100 rounded-lg">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-sediment-300 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-sediment-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m-6 3l6-3"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-sediment-900 mb-2">Map Unavailable</h3>
+        <p class="text-sm text-sediment-600">Mapbox configuration is required to display the interactive map.</p>
+      </div>
+    </div>
+  {:else}
+    <!-- Map will be rendered here -->
+  {/if}
 </div>
 
 <style>
