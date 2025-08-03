@@ -3,5 +3,10 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "sveltekit",
-  "regions": ["syd1"]
+  "regions": ["syd1"],
+  "functions": {
+    "app/index.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
 } 
