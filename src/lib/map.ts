@@ -35,7 +35,7 @@ export function initializeMap(container: string | HTMLElement): mapboxgl.Map | n
   console.log('PUBLIC_MAPBOX_ACCESS_TOKEN value:', import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN)
   
   // Try multiple ways to get the token
-  let mapboxToken = import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN
+  let mapboxToken = import.meta.env.PUBLIC_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_PUBLIC_MAPBOX_ACCESS_TOKEN
   
   // Fallback to hardcoded token for now
   if (!mapboxToken) {
