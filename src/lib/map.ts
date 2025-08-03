@@ -68,11 +68,14 @@ export function initializeMap(container: string | HTMLElement): mapboxgl.Map | n
     attributionControl: true
   })
 
-  // Add navigation controls
-  map.addControl(new mapboxgl.NavigationControl(), 'top-right')
-  
-  // Add fullscreen control
-  map.addControl(new mapboxgl.FullscreenControl(), 'top-right')
+  // Wait for map to load before adding controls
+  map.on('load', () => {
+    // Add navigation controls
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right')
+    
+    // Add fullscreen control
+    map.addControl(new mapboxgl.FullscreenControl(), 'top-right')
+  })
 
   return map
 }
@@ -85,6 +88,12 @@ export function getMap(): mapboxgl.Map | null {
 // Add tracks layer
 export function addTracksLayer(tracks: Track[]) {
   if (!map) return
+
+  // Wait for map to be loaded before adding layers
+  if (!map.isStyleLoaded()) {
+    map.once('style.load', () => addTracksLayer(tracks))
+    return
+  }
 
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.TRACKS)) {
@@ -141,6 +150,12 @@ export function addTracksLayer(tracks: Track[]) {
 // Add gold sites layer
 export function addGoldSitesLayer(goldSites: GoldSite[]) {
   if (!map) return
+
+  // Wait for map to be loaded before adding layers
+  if (!map.isStyleLoaded()) {
+    map.once('style.load', () => addGoldSitesLayer(goldSites))
+    return
+  }
 
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.GOLD_SITES_SYMBOL)) {
