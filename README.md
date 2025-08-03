@@ -27,8 +27,8 @@ AlluviaMaps provides layered mapping capabilities with premium features, user-ge
 
 ### 2. Subscription Tiers
 - **Free Tier**: Street maps, terrain, user-generated content
-- **Basic Tier** ($7.50/month or $75/year): Adds aerial imagery
-- **Premium Tier** ($12.50/month or $125/year): Full access including LiDAR data and gold sites database
+- **Basic Tier** ($TBA/month or $TBA/year): Adds aerial imagery
+- **Premium Tier** ($TBA/month or $TBA/year): Full access including LiDAR data and gold sites database
 
 ### 3. Community Features
 - User-generated track uploads and sharing
