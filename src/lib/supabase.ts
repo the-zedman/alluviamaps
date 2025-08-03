@@ -3,6 +3,10 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 
+// Debug environment variables
+console.log('Supabase URL:', supabaseUrl ? 'Found' : 'Missing')
+console.log('Supabase Anon Key:', supabaseAnonKey ? 'Found' : 'Missing')
+
 // Only create client if environment variables are available
 export const supabase = supabaseUrl && supabaseAnonKey 
   ? createClient(supabaseUrl, supabaseAnonKey)
