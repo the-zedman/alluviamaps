@@ -139,19 +139,19 @@ CREATE TRIGGER on_auth_user_created
 INSERT INTO public.tracks (title, description, coordinates, created_by, is_public, difficulty, distance_km, tags)
 VALUES 
     ('Bendigo Goldfields Walk', 'Historic gold mining trail through Bendigo', 
-     '[[-36.7589, 144.2802], [-36.7590, 144.2803], [-36.7591, 144.2804]]'::jsonb,
+     '[[144.2802, -36.7589], [144.2803, -36.7590], [144.2804, -36.7591]]'::jsonb,
      (SELECT id FROM public.users LIMIT 1), true, 'easy', 2.5, ARRAY['historic', 'gold', 'walking']),
     ('Ballarat Sovereign Hill Trail', 'Walking trail through historic gold mining area',
-     '[[-37.5622, 143.8503], [-37.5623, 143.8504], [-37.5624, 143.8505]]'::jsonb,
+     '[[143.8503, -37.5622], [143.8504, -37.5623], [143.8505, -37.5624]]'::jsonb,
      (SELECT id FROM public.users LIMIT 1), true, 'medium', 4.2, ARRAY['historic', 'gold', 'family']);
 
 INSERT INTO public.gold_sites (name, description, coordinates, created_by, is_public, historical_context, current_status, gold_found, site_type)
 VALUES 
     ('Bendigo Central Deborah Mine', 'Historic gold mine from the 1850s gold rush', 
-     '[-36.7589, 144.2802]'::jsonb,
+     '[144.2802, -36.7589]'::jsonb,
      (SELECT id FROM public.users LIMIT 1), true, 
      'One of the richest gold mines in Victoria during the 1850s gold rush', 'abandoned', true, 'hard_rock'),
     ('Ballarat Sovereign Hill', 'Recreated gold mining town and museum',
-     '[-37.5622, 143.8503]'::jsonb,
+     '[143.8503, -37.5622]'::jsonb,
      (SELECT id FROM public.users LIMIT 1), true,
      'Historic gold mining area now preserved as a living museum', 'restricted', false, 'alluvial'); 

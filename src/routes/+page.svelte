@@ -93,7 +93,7 @@
 				{goldSites} 
 				{showTracks} 
 				{showGoldSites}
-				center={[-36.7589, 144.2802]}
+				center={[144.2802, -36.7589]}
 				zoom={10}
 			/>
 		{/if}

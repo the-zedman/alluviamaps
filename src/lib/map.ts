@@ -5,7 +5,7 @@ import type { Track, GoldSite } from './supabase'
 
 // Map configuration
 export const MAP_CONFIG = {
-  defaultCenter: [-36.7589, 144.2802], // Bendigo, Victoria
+  defaultCenter: [144.2802, -36.7589], // Bendigo, Victoria (longitude, latitude)
   defaultZoom: 10,
   minZoom: 5,
   maxZoom: 18
