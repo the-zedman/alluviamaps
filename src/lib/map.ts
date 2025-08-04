@@ -221,6 +221,56 @@ export function addGoldSitesLayer(goldSites: GoldSite[]) {
   }
 }
 
+// Add a very obvious test marker
+export function addTestMarker() {
+  if (!map) return
+  
+  console.log('🎯 Adding VERY OBVIOUS test marker at Melbourne CBD!')
+  
+  // Add source for test marker
+  map.addSource('test-marker', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [144.9631, -37.8136] // Melbourne CBD
+        },
+        properties: {
+          name: 'TEST MARKER - CAN YOU SEE THIS?'
+        }
+      }]
+    }
+  })
+
+  // Add very obvious layer
+  map.addLayer({
+    id: 'test-marker-layer',
+    type: 'symbol',
+    source: 'test-marker',
+    layout: {
+      visibility: 'visible',
+      'icon-image': 'marker-15',
+      'icon-size': 5, // HUGE size
+      'text-field': ['get', 'name'],
+      'text-font': ['Open Sans Bold'],
+      'text-size': 20, // HUGE text
+      'text-offset': [0, -3],
+      'text-anchor': 'bottom'
+    },
+    paint: {
+      'icon-color': '#ff0000', // BRIGHT RED
+      'text-color': '#ff0000', // BRIGHT RED
+      'text-halo-color': '#ffffff',
+      'text-halo-width': 3
+    }
+  })
+  
+  console.log('🎯 Test marker added! Look for a HUGE RED marker in Melbourne CBD!')
+}
+
 // Internal function to add gold sites layer (called after style is loaded)
 function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
   if (!map) return

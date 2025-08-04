@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte'
 	import Map from '$lib/Map.svelte'
 	import { fetchTracks, fetchGoldSites } from '$lib/data'
+	import { addTestMarker } from '$lib/map'
 	import type { Track, GoldSite } from '$lib/supabase'
 
 	let tracks: Track[] = []
@@ -12,32 +13,33 @@
 	let searchQuery = ''
 
 	onMount(async () => {
+		console.log('🚀 Page mounted, fetching data...')
+		
 		try {
-			console.log('🔍 Starting data fetch...')
-			
-			// Fetch data from Supabase
 			const [tracksData, goldSitesData] = await Promise.all([
 				fetchTracks(),
 				fetchGoldSites()
 			])
 			
-			console.log('📊 Fetched tracks:', tracksData.length, tracksData)
-			console.log('📊 Fetched gold sites:', goldSitesData.length, goldSitesData)
-			
 			tracks = tracksData
 			goldSites = goldSitesData
+			
+			console.log('✅ Data loading complete')
+			
+			// Add very obvious test marker - DEPLOYMENT TRIGGER - UPDATED
+			setTimeout(() => {
+				addTestMarker()
+			}, 2000) // Wait 2 seconds for map to load
+			
 		} catch (error) {
 			console.error('❌ Error loading data:', error)
-		} finally {
-			loading = false
-			console.log('✅ Data loading complete')
 		}
 	})
 </script>
 
 <svelte:head>
 	<title>AlluviaMaps - Discover Hidden Tracks & Historical Mining Sites</title>
-	<!-- Force redeploy - Environment variable test -->
+			<!-- Force redeploy - Test marker deployment trigger -->
 </svelte:head>
 
 <!-- Map-First Landing Page -->
