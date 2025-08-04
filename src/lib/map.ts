@@ -107,9 +107,28 @@ export function addTracksLayer(tracks: Track[]) {
   }
 }
 
+// Fly to data area
+export function flyToDataArea() {
+  if (!map) return
+  
+  console.log('🗺️ Flying to data area...')
+  
+  // Fly to Victoria, Australia (where our sample data is)
+  map.flyTo({
+    center: [144.2802, -36.7589], // Bendigo area
+    zoom: 8,
+    duration: 2000
+  })
+  
+  console.log('✅ Flew to data area')
+}
+
 // Internal function to add tracks layer (called after style is loaded)
 function addTracksLayerInternal(tracks: Track[]) {
   if (!map) return
+
+  console.log('🗺️ addTracksLayerInternal - map bounds:', map.getBounds())
+  console.log('🗺️ addTracksLayerInternal - map center:', map.getCenter())
 
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.TRACKS)) {
@@ -143,30 +162,38 @@ function addTracksLayerInternal(tracks: Track[]) {
 
   console.log('📊 Tracks GeoJSON:', tracksGeoJSON)
 
-  // Add source
-  map.addSource(SOURCE_IDS.TRACKS, {
-    type: 'geojson',
-    data: tracksGeoJSON
-  })
+  try {
+    // Add source
+    map.addSource(SOURCE_IDS.TRACKS, {
+      type: 'geojson',
+      data: tracksGeoJSON
+    })
 
-  // Add layer
-  map.addLayer({
-    id: LAYER_IDS.TRACKS,
-    type: 'line',
-    source: SOURCE_IDS.TRACKS,
-    paint: {
-      'line-color': [
-        'case',
-        ['==', ['get', 'difficulty'], 'easy'], '#10b981',
-        ['==', ['get', 'difficulty'], 'medium'], '#f59e0b',
-        '#ef4444'
-      ],
-      'line-width': 3,
-      'line-opacity': 0.8
-    }
-  })
+    // Add layer
+    map.addLayer({
+      id: LAYER_IDS.TRACKS,
+      type: 'line',
+      source: SOURCE_IDS.TRACKS,
+      paint: {
+        'line-color': [
+          'case',
+          ['==', ['get', 'difficulty'], 'easy'], '#10b981',
+          ['==', ['get', 'difficulty'], 'medium'], '#f59e0b',
+          '#ef4444'
+        ],
+        'line-width': 3,
+        'line-opacity': 0.8
+      }
+    })
 
-  console.log('✅ Tracks layer added successfully')
+    console.log('✅ Tracks layer added successfully')
+    console.log('🗺️ Tracks layer visible:', map.getLayoutProperty(LAYER_IDS.TRACKS, 'visibility'))
+    
+    // Fly to data area after adding tracks
+    flyToDataArea()
+  } catch (error) {
+    console.error('❌ Error adding tracks layer:', error)
+  }
 }
 
 // Add gold sites layer
@@ -194,6 +221,9 @@ export function addGoldSitesLayer(goldSites: GoldSite[]) {
 // Internal function to add gold sites layer (called after style is loaded)
 function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
   if (!map) return
+
+  console.log('🗺️ addGoldSitesLayerInternal - map bounds:', map.getBounds())
+  console.log('🗺️ addGoldSitesLayerInternal - map center:', map.getCenter())
 
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.GOLD_SITES_SYMBOL)) {
@@ -226,38 +256,43 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
 
   console.log('📊 Gold sites GeoJSON:', goldSitesGeoJSON)
 
-  // Add source
-  map.addSource(SOURCE_IDS.GOLD_SITES, {
-    type: 'geojson',
-    data: goldSitesGeoJSON
-  })
+  try {
+    // Add source
+    map.addSource(SOURCE_IDS.GOLD_SITES, {
+      type: 'geojson',
+      data: goldSitesGeoJSON
+    })
 
-  // Add symbol layer
-  map.addLayer({
-    id: LAYER_IDS.GOLD_SITES_SYMBOL,
-    type: 'symbol',
-    source: SOURCE_IDS.GOLD_SITES,
-    layout: {
-      'icon-image': 'marker-15',
-      'icon-size': 1.5,
-      'text-field': ['get', 'name'],
-      'text-font': ['Open Sans Regular'],
-      'text-offset': [0, 1.5],
-      'text-anchor': 'top'
-    },
-    paint: {
-      'icon-color': [
-        'case',
-        ['==', ['get', 'gold_found'], true], '#fbbf24',
-        '#78716c'
-      ],
-      'text-color': '#374151',
-      'text-halo-color': '#ffffff',
-      'text-halo-width': 1
-    }
-  })
+    // Add symbol layer
+    map.addLayer({
+      id: LAYER_IDS.GOLD_SITES_SYMBOL,
+      type: 'symbol',
+      source: SOURCE_IDS.GOLD_SITES,
+      layout: {
+        'icon-image': 'marker-15',
+        'icon-size': 1.5,
+        'text-field': ['get', 'name'],
+        'text-font': ['Open Sans Regular'],
+        'text-offset': [0, 1.5],
+        'text-anchor': 'top'
+      },
+      paint: {
+        'icon-color': [
+          'case',
+          ['==', ['get', 'gold_found'], true], '#fbbf24',
+          '#78716c'
+        ],
+        'text-color': '#374151',
+        'text-halo-color': '#ffffff',
+        'text-halo-width': 1
+      }
+    })
 
-  console.log('✅ Gold sites layer added successfully')
+    console.log('✅ Gold sites layer added successfully')
+    console.log('🗺️ Gold sites layer visible:', map.getLayoutProperty(LAYER_IDS.GOLD_SITES_SYMBOL, 'visibility'))
+  } catch (error) {
+    console.error('❌ Error adding gold sites layer:', error)
+  }
 }
 
 // Toggle layer visibility
