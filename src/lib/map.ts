@@ -80,17 +80,8 @@ export function initializeMap(container: string | HTMLElement): mapboxgl.Map | n
   // Handle missing images
   map?.on('styleimagemissing', (e) => {
     if (e.id === 'marker-15') {
-      // Load the marker icon from Mapbox's sprite
-      map?.loadImage('https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/sprite@2x.png', (error, image) => {
-        if (error) {
-          console.warn('Could not load marker icon:', error)
-          return
-        }
-        
-        if (image && map) {
-          map.addImage('marker-15', image, { pixelRatio: 2 })
-        }
-      })
+      // Use a simple circle instead of trying to load external sprite
+      console.log('Using custom circle marker instead of sprite')
     }
   })
 
@@ -259,15 +250,29 @@ export function addTestMarker() {
     }
   })
 
-  // Add very obvious layer
+  // Add very obvious circle layer
   map.addLayer({
     id: 'test-marker-layer',
+    type: 'circle',
+    source: 'test-marker',
+    layout: {
+      visibility: 'visible'
+    },
+    paint: {
+      'circle-radius': 20, // HUGE size
+      'circle-color': '#ff0000', // BRIGHT RED
+      'circle-stroke-color': '#ffffff',
+      'circle-stroke-width': 3
+    }
+  })
+
+  // Add text layer for test marker
+  map.addLayer({
+    id: 'test-marker-text',
     type: 'symbol',
     source: 'test-marker',
     layout: {
       visibility: 'visible',
-      'icon-image': 'marker-15',
-      'icon-size': 5, // HUGE size
       'text-field': ['get', 'name'],
       'text-font': ['Open Sans Bold'],
       'text-size': 20, // HUGE text
@@ -275,7 +280,6 @@ export function addTestMarker() {
       'text-anchor': 'bottom'
     },
     paint: {
-      'icon-color': '#ff0000', // BRIGHT RED
       'text-color': '#ff0000', // BRIGHT RED
       'text-halo-color': '#ffffff',
       'text-halo-width': 3
@@ -330,26 +334,39 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
       data: goldSitesGeoJSON
     })
 
-    // Add symbol layer
+    // Add circle layer instead of symbol layer
     map.addLayer({
       id: LAYER_IDS.GOLD_SITES_SYMBOL,
+      type: 'circle',
+      source: SOURCE_IDS.GOLD_SITES,
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'circle-radius': 8,
+        'circle-color': [
+          'case',
+          ['==', ['get', 'gold_found'], true], '#fbbf24',
+          '#78716c'
+        ],
+        'circle-stroke-color': '#ffffff',
+        'circle-stroke-width': 2
+      }
+    })
+
+    // Add text layer for labels
+    map.addLayer({
+      id: 'gold-sites-labels',
       type: 'symbol',
       source: SOURCE_IDS.GOLD_SITES,
       layout: {
         visibility: 'visible',
-        'icon-image': 'marker-15',
-        'icon-size': 1.5,
         'text-field': ['get', 'name'],
         'text-font': ['Open Sans Regular'],
         'text-offset': [0, 1.5],
         'text-anchor': 'top'
       },
       paint: {
-        'icon-color': [
-          'case',
-          ['==', ['get', 'gold_found'], true], '#fbbf24',
-          '#78716c'
-        ],
         'text-color': '#374151',
         'text-halo-color': '#ffffff',
         'text-halo-width': 1
