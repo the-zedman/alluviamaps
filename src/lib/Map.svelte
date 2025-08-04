@@ -15,21 +15,29 @@
   let mapContainer: HTMLDivElement
   let map: any
   let mapError = false
+  let mapLoading = true
+  let tracksAdded = false
+  let goldSitesAdded = false
 
-  // Layer visibility
-  $: if (map) {
+  // Handle layer visibility changes
+  $: if (map && tracksAdded) {
     toggleLayer('tracks-layer', showTracks)
+  }
+
+  $: if (map && goldSitesAdded) {
     toggleLayer('gold-sites-symbols', showGoldSites)
   }
 
-  // Update tracks when data changes
-  $: if (map && tracks.length > 0 && showTracks) {
+  // Handle tracks data changes - only add once
+  $: if (map && tracks.length > 0 && showTracks && !tracksAdded) {
     addTracksLayer(tracks)
+    tracksAdded = true
   }
 
-  // Update gold sites when data changes
-  $: if (map && goldSites.length > 0 && showGoldSites) {
+  // Handle gold sites data changes - only add once
+  $: if (map && goldSites.length > 0 && showGoldSites && !goldSitesAdded) {
     addGoldSitesLayer(goldSites)
+    goldSitesAdded = true
   }
 
   onMount(() => {
@@ -37,13 +45,17 @@
       map = initializeMap(mapContainer)
       
       if (map) {
+        mapLoading = false
+        
         // Add initial data if available
         if (tracks.length > 0 && showTracks) {
           addTracksLayer(tracks)
+          tracksAdded = true
         }
         
         if (goldSites.length > 0 && showGoldSites) {
           addGoldSitesLayer(goldSites)
+          goldSitesAdded = true
         }
 
         // Fly to center if provided
@@ -52,6 +64,7 @@
         }
       } else {
         mapError = true
+        mapLoading = false
         console.error('Failed to initialize map - Mapbox token may be missing')
       }
     }
@@ -91,6 +104,13 @@
         </div>
         <h3 class="text-lg font-semibold text-sediment-900 mb-2">Map Unavailable</h3>
         <p class="text-sm text-sediment-600">Mapbox configuration is required to display the interactive map.</p>
+      </div>
+    </div>
+  {:else if mapLoading}
+    <div class="flex items-center justify-center h-full bg-sediment-100 rounded-lg">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-alluvia-600 mx-auto mb-4"></div>
+        <p class="text-sediment-600">Initializing map...</p>
       </div>
     </div>
   {:else}

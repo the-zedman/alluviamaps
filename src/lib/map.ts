@@ -191,9 +191,6 @@ function addTracksLayerInternal(tracks: Track[]) {
 
     console.log('✅ Tracks layer added successfully')
     console.log('🗺️ Tracks layer visible:', map.getLayoutProperty(LAYER_IDS.TRACKS, 'visibility'))
-    
-    // Fly to data area after adding tracks
-    flyToDataArea()
   } catch (error) {
     console.error('❌ Error adding tracks layer:', error)
   }

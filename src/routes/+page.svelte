@@ -25,6 +25,7 @@
 			goldSites = goldSitesData
 			
 			console.log('✅ Data loading complete')
+			loading = false
 			
 			// Add very obvious test marker - DEPLOYMENT TRIGGER - UPDATED
 			setTimeout(() => {
@@ -33,6 +34,7 @@
 			
 		} catch (error) {
 			console.error('❌ Error loading data:', error)
+			loading = false
 		}
 	})
 </script>
