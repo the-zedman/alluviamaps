@@ -54,6 +54,9 @@ export function initializeMap(container: string | HTMLElement): mapboxgl.Map | n
   
   mapboxgl.accessToken = mapboxToken
 
+  // Disable Mapbox analytics to prevent CORS errors
+  mapboxgl.setRTLTextPlugin = () => {}
+  
   if (map) {
     map.remove()
   }
@@ -65,7 +68,10 @@ export function initializeMap(container: string | HTMLElement): mapboxgl.Map | n
     zoom: MAP_CONFIG.defaultZoom,
     minZoom: MAP_CONFIG.minZoom,
     maxZoom: MAP_CONFIG.maxZoom,
-    attributionControl: true
+    attributionControl: true,
+    trackResize: true,
+    // Disable Mapbox events to prevent CORS errors
+    cooperativeGestures: false
   })
 
   // Wait for map to load before adding controls
@@ -80,8 +86,31 @@ export function initializeMap(container: string | HTMLElement): mapboxgl.Map | n
   // Handle missing images
   map?.on('styleimagemissing', (e) => {
     if (e.id === 'marker-15') {
-      // Use a simple circle instead of trying to load external sprite
-      console.log('Using custom circle marker instead of sprite')
+      // Create a simple custom marker using a data URL
+      const canvas = document.createElement('canvas')
+      canvas.width = 32
+      canvas.height = 32
+      const ctx = canvas.getContext('2d')
+      
+      if (ctx) {
+        // Draw a simple circle marker
+        ctx.fillStyle = '#ff0000'
+        ctx.beginPath()
+        ctx.arc(16, 16, 12, 0, 2 * Math.PI)
+        ctx.fill()
+        
+        // Add white border
+        ctx.strokeStyle = '#ffffff'
+        ctx.lineWidth = 2
+        ctx.stroke()
+        
+        // Convert to data URL
+        const dataURL = canvas.toDataURL()
+        
+        // Add the image to the map
+        map?.addImage('marker-15', canvas as any, { pixelRatio: 1 })
+        console.log('✅ Custom marker icon created and added')
+      }
     }
   })
 
