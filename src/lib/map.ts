@@ -174,6 +174,9 @@ function addTracksLayerInternal(tracks: Track[]) {
       id: LAYER_IDS.TRACKS,
       type: 'line',
       source: SOURCE_IDS.TRACKS,
+      layout: {
+        visibility: 'visible'
+      },
       paint: {
         'line-color': [
           'case',
@@ -269,6 +272,7 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
       type: 'symbol',
       source: SOURCE_IDS.GOLD_SITES,
       layout: {
+        visibility: 'visible',
         'icon-image': 'marker-15',
         'icon-size': 1.5,
         'text-field': ['get', 'name'],
