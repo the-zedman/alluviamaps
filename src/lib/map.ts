@@ -199,6 +199,7 @@ function addTracksLayerInternal(tracks: Track[]) {
 
     console.log('✅ Tracks layer added successfully')
     console.log('🗺️ Tracks layer visible:', map.getLayoutProperty(LAYER_IDS.TRACKS, 'visibility'))
+    debugLayers()
   } catch (error) {
     console.error('❌ Error adding tracks layer:', error)
   }
@@ -375,6 +376,7 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
 
     console.log('✅ Gold sites layer added successfully')
     console.log('🗺️ Gold sites layer visible:', map.getLayoutProperty(LAYER_IDS.GOLD_SITES_SYMBOL, 'visibility'))
+    debugLayers()
   } catch (error) {
     console.error('❌ Error adding gold sites layer:', error)
   }
@@ -412,5 +414,20 @@ export function cleanupMap() {
   if (map) {
     map.remove()
     map = null
+  }
+}
+
+// Debug function to list all layers
+export function debugLayers() {
+  if (!map) return
+  
+  console.log('🔍 Debug: All layers on map:')
+  const style = map.getStyle()
+  if (style.layers) {
+    style.layers.forEach(layer => {
+      console.log(`  - ${layer.id} (${layer.type})`)
+    })
+  } else {
+    console.log('  No layers found')
   }
 } 
