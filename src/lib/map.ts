@@ -69,12 +69,29 @@ export function initializeMap(container: string | HTMLElement): mapboxgl.Map | n
   })
 
   // Wait for map to load before adding controls
-  map.on('load', () => {
+  map?.on('load', () => {
     // Add navigation controls
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right')
+    map?.addControl(new mapboxgl.NavigationControl(), 'top-right')
     
     // Add fullscreen control
-    map.addControl(new mapboxgl.FullscreenControl(), 'top-right')
+    map?.addControl(new mapboxgl.FullscreenControl(), 'top-right')
+  })
+
+  // Handle missing images
+  map?.on('styleimagemissing', (e) => {
+    if (e.id === 'marker-15') {
+      // Load the marker icon from Mapbox's sprite
+      map?.loadImage('https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/sprite@2x.png', (error, image) => {
+        if (error) {
+          console.warn('Could not load marker icon:', error)
+          return
+        }
+        
+        if (image && map) {
+          map.addImage('marker-15', image, { pixelRatio: 2 })
+        }
+      })
+    }
   })
 
   return map
