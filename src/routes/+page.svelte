@@ -5,6 +5,8 @@
 	import { addTestMarker } from '$lib/map'
 	import type { Track, GoldSite } from '$lib/supabase'
 
+	console.log('🚀 +page.svelte script is loading...')
+
 	let tracks: Track[] = []
 	let goldSites: GoldSite[] = []
 	let loading = true
@@ -13,6 +15,7 @@
 	let searchQuery = ''
 
 	onMount(async () => {
+		console.log('🚀 onMount function called!')
 		console.log('🚀 Page mounted, fetching data...')
 		console.log('🔍 Testing function imports:', { fetchTracks, fetchGoldSites })
 		
