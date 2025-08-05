@@ -244,9 +244,7 @@ function addTracksLayerInternal(tracks: Track[]) {
       }
     })
 
-    console.log('✅ Tracks layer added successfully')
-    console.log('🗺️ Tracks layer visible:', map.getLayoutProperty(LAYER_IDS.TRACKS, 'visibility'))
-    debugLayers()
+
   } catch (error) {
     console.error('❌ Error adding tracks layer:', error)
   }
@@ -254,21 +252,13 @@ function addTracksLayerInternal(tracks: Track[]) {
 
 // Add gold sites layer
 export function addGoldSitesLayer(goldSites: GoldSite[]) {
-  console.log('🗺️ addGoldSitesLayer called with gold sites:', goldSites.length, goldSites)
-  
-  if (!map) {
-    console.warn('❌ Map not available for gold sites layer')
-    return
-  }
+  if (!map) return
 
   // Check if map style is already loaded
   if (map.isStyleLoaded()) {
-    console.log('✅ Map style already loaded, adding gold sites layer...')
     addGoldSitesLayerInternal(goldSites)
   } else {
-    console.log('⏳ Map style not loaded, waiting...')
     map.once('style.load', () => {
-      console.log('✅ Map style loaded, adding gold sites layer...')
       addGoldSitesLayerInternal(goldSites)
     })
   }
@@ -282,16 +272,11 @@ export function addGoldSitesLayer(goldSites: GoldSite[]) {
 function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
   if (!map) return
 
-  console.log('🗺️ addGoldSitesLayerInternal - map bounds:', map.getBounds())
-  console.log('🗺️ addGoldSitesLayerInternal - map center:', map.getCenter())
-
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.GOLD_SITES_SYMBOL)) {
-    console.log('🗑️ Removing existing gold sites layer')
     map.removeLayer(LAYER_IDS.GOLD_SITES_SYMBOL)
   }
   if (map.getSource(SOURCE_IDS.GOLD_SITES)) {
-    console.log('🗑️ Removing existing gold sites source')
     map.removeSource(SOURCE_IDS.GOLD_SITES)
   }
 
@@ -314,7 +299,7 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
     }))
   }
 
-  console.log('📊 Gold sites GeoJSON:', goldSitesGeoJSON)
+
 
   try {
     // Add source
@@ -362,9 +347,7 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
       }
     })
 
-    console.log('✅ Gold sites layer added successfully')
-    console.log('🗺️ Gold sites layer visible:', map.getLayoutProperty(LAYER_IDS.GOLD_SITES_SYMBOL, 'visibility'))
-    debugLayers()
+
     
     // Fly to test data area to make sure we can see the markers
     setTimeout(() => {
@@ -379,14 +362,9 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
 export function toggleLayer(layerId: string, visible: boolean) {
   if (!map) return
   
-  console.log(`🔧 toggleLayer called: ${layerId} -> ${visible}`)
-  
   const layer = map.getLayer(layerId)
   if (layer) {
     map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none')
-    console.log(`✅ Layer ${layerId} visibility set to: ${visible ? 'visible' : 'none'}`)
-  } else {
-    console.log(`❌ Layer ${layerId} not found`)
   }
 }
 
@@ -415,37 +393,4 @@ export function cleanupMap() {
   }
 }
 
-// Debug function to list all layers
-export function debugLayers() {
-  if (!map) return
-  
-  console.log('🔍 Debug: All layers on map:')
-  const style = map.getStyle()
-  if (style.layers) {
-    style.layers.forEach(layer => {
-      console.log(`  - ${layer.id} (${layer.type})`)
-    })
-  } else {
-    console.log('  No layers found')
-  }
-  
-  // Check specific layers we're looking for
-  console.log('🔍 Checking specific layers:')
-  console.log(`  tracks-layer exists: ${map.getLayer('tracks-layer') ? 'YES' : 'NO'}`)
-  console.log(`  gold-sites-symbols exists: ${map.getLayer('gold-sites-symbols') ? 'YES' : 'NO'}`)
-  console.log(`  gold-sites-labels exists: ${map.getLayer('gold-sites-labels') ? 'YES' : 'NO'}`)
-  
-  // Check layer visibility
-  if (map.getLayer('tracks-layer')) {
-    console.log(`  tracks-layer visibility: ${map.getLayoutProperty('tracks-layer', 'visibility')}`)
-  }
-  if (map.getLayer('gold-sites-symbols')) {
-    console.log(`  gold-sites-symbols visibility: ${map.getLayoutProperty('gold-sites-symbols', 'visibility')}`)
-  }
-  
-  // Check map state
-  console.log('🗺️ Map state:')
-  console.log(`  Center: ${map.getCenter().lng}, ${map.getCenter().lat}`)
-  console.log(`  Zoom: ${map.getZoom()}`)
-  console.log(`  Bounds: ${map.getBounds().toString()}`)
-} 
+ 
