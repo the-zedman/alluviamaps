@@ -16,15 +16,21 @@
 		console.log('🚀 Page mounted, fetching data...')
 		
 		try {
+			console.log('🔍 About to call fetchTracks and fetchGoldSites...')
 			const [tracksData, goldSitesData] = await Promise.all([
 				fetchTracks(),
 				fetchGoldSites()
 			])
 			
+			console.log('📊 Received tracks data:', tracksData)
+			console.log('📊 Received gold sites data:', goldSitesData)
+			
 			tracks = tracksData
 			goldSites = goldSitesData
 			
 			console.log('✅ Data loading complete')
+			console.log('📊 Final tracks array:', tracks)
+			console.log('📊 Final goldSites array:', goldSites)
 			loading = false
 			
 			// Add very obvious test marker - DEPLOYMENT TRIGGER - UPDATED
