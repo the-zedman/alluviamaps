@@ -21,11 +21,15 @@
 
   // Handle layer visibility changes
   $: if (map && tracksAdded) {
-    toggleLayer('tracks-layer', showTracks)
+    setTimeout(() => {
+      toggleLayer('tracks-layer', showTracks)
+    }, 100) // Small delay to ensure layer is fully added
   }
 
   $: if (map && goldSitesAdded) {
-    toggleLayer('gold-sites-symbols', showGoldSites)
+    setTimeout(() => {
+      toggleLayer('gold-sites-symbols', showGoldSites)
+    }, 100) // Small delay to ensure layer is fully added
   }
 
   // Handle tracks data changes - only add once
