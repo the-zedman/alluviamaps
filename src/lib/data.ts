@@ -9,22 +9,17 @@ const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
 
 // Fetch tracks from Supabase
 export async function fetchTracks(useCache = true): Promise<Track[]> {
-  console.log('🔍 fetchTracks called, useCache:', useCache)
-  
   // Return cached data if available and fresh
   if (useCache && tracksCache && Date.now() - lastFetch < CACHE_DURATION) {
-    console.log('📦 Returning cached tracks:', tracksCache.length)
     return tracksCache
   }
 
   // Return empty array if supabase is not available
   if (!supabase) {
-    console.warn('❌ Supabase client not available')
     return []
   }
 
   try {
-    console.log('🔍 Querying Supabase for tracks...')
     const { data, error } = await supabase
       .from('tracks')
       .select('*')
@@ -35,14 +30,6 @@ export async function fetchTracks(useCache = true): Promise<Track[]> {
       console.error('❌ Error fetching tracks:', error)
       return tracksCache || []
     }
-
-    console.log('✅ Tracks query successful, data:', data)
-    console.log('📊 Tracks data details:', data?.map(track => ({
-      id: track.id,
-      title: track.title,
-      coordinates: track.coordinates,
-      coordinates_length: track.coordinates?.length
-    })))
     
     tracksCache = data as Track[]
     lastFetch = Date.now()
@@ -55,22 +42,17 @@ export async function fetchTracks(useCache = true): Promise<Track[]> {
 
 // Fetch gold sites from Supabase
 export async function fetchGoldSites(useCache = true): Promise<GoldSite[]> {
-  console.log('🔍 fetchGoldSites called, useCache:', useCache)
-  
   // Return cached data if available and fresh
   if (useCache && goldSitesCache && Date.now() - lastFetch < CACHE_DURATION) {
-    console.log('📦 Returning cached gold sites:', goldSitesCache.length)
     return goldSitesCache
   }
 
   // Return empty array if supabase is not available
   if (!supabase) {
-    console.warn('❌ Supabase client not available')
     return []
   }
 
   try {
-    console.log('🔍 Querying Supabase for gold sites...')
     const { data, error } = await supabase
       .from('gold_sites')
       .select('*')
@@ -81,14 +63,6 @@ export async function fetchGoldSites(useCache = true): Promise<GoldSite[]> {
       console.error('❌ Error fetching gold sites:', error)
       return goldSitesCache || []
     }
-
-    console.log('✅ Gold sites query successful, data:', data)
-    console.log('📊 Gold sites data details:', data?.map(site => ({
-      id: site.id,
-      name: site.name,
-      coordinates: site.coordinates,
-      gold_found: site.gold_found
-    })))
     
     goldSitesCache = data as GoldSite[]
     lastFetch = Date.now()
