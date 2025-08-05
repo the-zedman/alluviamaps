@@ -305,7 +305,7 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
         visibility: 'visible'
       },
       paint: {
-        'circle-radius': 20, // MUCH LARGER for testing
+        'circle-radius': 8, // Normal size for gold markers
         'circle-color': [
           'case',
           ['==', ['get', 'gold_found'], true], '#fbbf24',
