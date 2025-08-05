@@ -1,11 +1,20 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
-	import Map from '$lib/Map.svelte'
-	import { fetchTracks, fetchGoldSites } from '$lib/data'
-	import { addTestMarker } from '$lib/map'
-	import type { Track, GoldSite } from '$lib/supabase'
-
 	console.log('🚀 +page.svelte script is loading...')
+	
+	import { onMount } from 'svelte'
+	console.log('🚀 onMount imported successfully')
+	
+	import Map from '$lib/Map.svelte'
+	console.log('🚀 Map component imported successfully')
+	
+	import { fetchTracks, fetchGoldSites } from '$lib/data'
+	console.log('🚀 Data functions imported successfully')
+	
+	import { addTestMarker } from '$lib/map'
+	console.log('🚀 Map functions imported successfully')
+	
+	import type { Track, GoldSite } from '$lib/supabase'
+	console.log('🚀 Types imported successfully')
 
 	let tracks: Track[] = []
 	let goldSites: GoldSite[] = []
