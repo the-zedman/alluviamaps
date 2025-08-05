@@ -1,20 +1,9 @@
 <script lang="ts">
-	console.log('🚀 +page.svelte script is loading...')
-	
 	import { onMount } from 'svelte'
-	console.log('✅ onMount imported successfully')
-	
 	import Map from '$lib/Map.svelte'
-	console.log('✅ Map component imported successfully')
-	
 	import { fetchTracks, fetchGoldSites } from '$lib/data'
-	console.log('✅ Data functions imported successfully')
-	
-	import { addTestMarker } from '$lib/map'
-	console.log('✅ Map functions imported successfully')
 	
 	import type { Track, GoldSite } from '$lib/supabase'
-	console.log('✅ Types imported successfully')
 
 	let tracks: Track[] = []
 	let goldSites: GoldSite[] = []
@@ -24,22 +13,10 @@
 	let searchQuery = ''
 
 	onMount(async () => {
-		console.log('🚀 onMount function called!')
 		console.log('🚀 Page mounted, fetching data...')
-		console.log('🔍 Testing function imports:', { fetchTracks, fetchGoldSites })
 		
 		try {
 			console.log('🔍 About to call fetchTracks and fetchGoldSites...')
-			
-			// Test individual calls
-			console.log('🔍 Testing fetchTracks individually...')
-			const tracksTest = await fetchTracks()
-			console.log('📊 fetchTracks result:', tracksTest)
-			
-			console.log('🔍 Testing fetchGoldSites individually...')
-			const goldSitesTest = await fetchGoldSites()
-			console.log('📊 fetchGoldSites result:', goldSitesTest)
-			
 			const [tracksData, goldSitesData] = await Promise.all([
 				fetchTracks(),
 				fetchGoldSites()
@@ -56,10 +33,10 @@
 			console.log('📊 Final goldSites array:', goldSites)
 			loading = false
 			
-			// Add very obvious test marker - DEPLOYMENT TRIGGER - UPDATED
-			setTimeout(() => {
-				addTestMarker()
-			}, 2000) // Wait 2 seconds for map to load
+					// Map loaded successfully
+		setTimeout(() => {
+			// Map is ready
+		}, 2000) // Wait 2 seconds for map to load
 			
 		} catch (error) {
 			console.error('❌ Error loading data:', error)
@@ -70,6 +47,7 @@
 
 <svelte:head>
 	<title>AlluviaMaps - Discover Hidden Tracks & Historical Mining Sites</title>
+		
 </svelte:head>
 
 <!-- Map-First Landing Page -->
