@@ -37,6 +37,13 @@ export async function fetchTracks(useCache = true): Promise<Track[]> {
     }
 
     console.log('✅ Tracks query successful, data:', data)
+    console.log('📊 Tracks data details:', data?.map(track => ({
+      id: track.id,
+      title: track.title,
+      coordinates: track.coordinates,
+      coordinates_length: track.coordinates?.length
+    })))
+    
     tracksCache = data as Track[]
     lastFetch = Date.now()
     return tracksCache
@@ -76,6 +83,13 @@ export async function fetchGoldSites(useCache = true): Promise<GoldSite[]> {
     }
 
     console.log('✅ Gold sites query successful, data:', data)
+    console.log('📊 Gold sites data details:', data?.map(site => ({
+      id: site.id,
+      name: site.name,
+      coordinates: site.coordinates,
+      gold_found: site.gold_found
+    })))
+    
     goldSitesCache = data as GoldSite[]
     lastFetch = Date.now()
     return goldSitesCache
