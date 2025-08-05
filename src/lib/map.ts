@@ -160,6 +160,22 @@ export function flyToDataArea() {
   console.log('✅ Flew to data area')
 }
 
+// Fly to test data area
+export function flyToTestData() {
+  if (!map) return
+  
+  console.log('🗺️ Flying to test data area (Bendigo)...')
+  
+  // Fly to Bendigo where our test data is
+  map.flyTo({
+    center: [144.2802, -36.7589], // Bendigo coordinates
+    zoom: 12, // Closer zoom to see the markers
+    duration: 2000
+  })
+  
+  console.log('✅ Flew to test data area')
+}
+
 // Internal function to add tracks layer (called after style is loaded)
 function addTracksLayerInternal(tracks: Track[]) {
   if (!map) return
@@ -375,14 +391,14 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
         visibility: 'visible'
       },
       paint: {
-        'circle-radius': 8,
+        'circle-radius': 20, // MUCH LARGER for testing
         'circle-color': [
           'case',
           ['==', ['get', 'gold_found'], true], '#fbbf24',
           '#78716c'
         ],
         'circle-stroke-color': '#ffffff',
-        'circle-stroke-width': 2
+        'circle-stroke-width': 3
       }
     })
 
@@ -408,6 +424,11 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
     console.log('✅ Gold sites layer added successfully')
     console.log('🗺️ Gold sites layer visible:', map.getLayoutProperty(LAYER_IDS.GOLD_SITES_SYMBOL, 'visibility'))
     debugLayers()
+    
+    // Fly to test data area to make sure we can see the markers
+    setTimeout(() => {
+      flyToTestData()
+    }, 1000)
   } catch (error) {
     console.error('❌ Error adding gold sites layer:', error)
   }
@@ -480,4 +501,10 @@ export function debugLayers() {
   if (map.getLayer('gold-sites-symbols')) {
     console.log(`  gold-sites-symbols visibility: ${map.getLayoutProperty('gold-sites-symbols', 'visibility')}`)
   }
+  
+  // Check map state
+  console.log('🗺️ Map state:')
+  console.log(`  Center: ${map.getCenter().lng}, ${map.getCenter().lat}`)
+  console.log(`  Zoom: ${map.getZoom()}`)
+  console.log(`  Bounds: ${map.getBounds().toString()}`)
 } 
