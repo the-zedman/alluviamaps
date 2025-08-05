@@ -337,6 +337,69 @@ export function addTestMarker() {
   console.log('🎯 Test marker added! Look for a HUGE RED marker in Melbourne CBD!')
 }
 
+// Add a simple test marker at map center
+export function addTestMarkerAtCenter() {
+  if (!map) return
+  
+  console.log('🎯 Adding test marker at map center!')
+  
+  // Add source for test marker at center
+  map.addSource('test-center-marker', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [144.2802, -36.7589] // Bendigo center
+        },
+        properties: {
+          name: 'TEST CENTER MARKER'
+        }
+      }]
+    }
+  })
+
+  // Add very obvious circle layer
+  map.addLayer({
+    id: 'test-center-marker-circle',
+    type: 'circle',
+    source: 'test-center-marker',
+    layout: {
+      visibility: 'visible'
+    },
+    paint: {
+      'circle-radius': 30, // HUGE size
+      'circle-color': '#00ff00', // BRIGHT GREEN
+      'circle-stroke-color': '#000000',
+      'circle-stroke-width': 5
+    }
+  })
+
+  // Add text layer
+  map.addLayer({
+    id: 'test-center-marker-text',
+    type: 'symbol',
+    source: 'test-center-marker',
+    layout: {
+      visibility: 'visible',
+      'text-field': ['get', 'name'],
+      'text-font': ['Open Sans Bold'],
+      'text-size': 24,
+      'text-offset': [0, -3],
+      'text-anchor': 'bottom'
+    },
+    paint: {
+      'text-color': '#000000',
+      'text-halo-color': '#ffffff',
+      'text-halo-width': 3
+    }
+  })
+  
+  console.log('🎯 Test center marker added! Look for a HUGE GREEN circle at Bendigo center!')
+}
+
 // Internal function to add gold sites layer (called after style is loaded)
 function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
   if (!map) return
@@ -428,6 +491,10 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
     // Fly to test data area to make sure we can see the markers
     setTimeout(() => {
       flyToTestData()
+      // Add test marker at center
+      setTimeout(() => {
+        addTestMarkerAtCenter()
+      }, 2000)
     }, 1000)
   } catch (error) {
     console.error('❌ Error adding gold sites layer:', error)
