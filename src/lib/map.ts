@@ -133,12 +133,9 @@ export function addTracksLayer(tracks: Track[]) {
 
   // Check if map style is already loaded
   if (map.isStyleLoaded()) {
-    console.log('✅ Map style already loaded, adding tracks layer...')
     addTracksLayerInternal(tracks)
   } else {
-    console.log('⏳ Map style not loaded, waiting...')
     map.once('style.load', () => {
-      console.log('✅ Map style loaded, adding tracks layer...')
       addTracksLayerInternal(tracks)
     })
   }
@@ -164,25 +161,17 @@ export function flyToDataArea() {
 export function flyToTestData() {
   if (!map) return
   
-  console.log('🗺️ Flying to test data area (Bendigo)...')
-  
   // Fly to Bendigo where our test data is
   map.flyTo({
     center: [144.2802, -36.7589], // Bendigo coordinates
     zoom: 12, // Closer zoom to see the markers
     duration: 2000
   })
-  
-  console.log('✅ Flew to test data area')
 }
 
 // Internal function to add tracks layer (called after style is loaded)
 function addTracksLayerInternal(tracks: Track[]) {
   if (!map) return
-
-  console.log('🗺️ addTracksLayerInternal - map bounds:', map.getBounds())
-  console.log('🗺️ addTracksLayerInternal - map center:', map.getCenter())
-  console.log('🗺️ addTracksLayerInternal - tracks data:', tracks)
 
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.TRACKS)) {
@@ -214,8 +203,7 @@ function addTracksLayerInternal(tracks: Track[]) {
     }))
   }
 
-  console.log('📊 Tracks GeoJSON:', tracksGeoJSON)
-  console.log('📊 Tracks coordinates:', tracks.map(t => t.coordinates))
+
 
   try {
     // Add source
