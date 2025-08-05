@@ -14,9 +14,20 @@
 
 	onMount(async () => {
 		console.log('🚀 Page mounted, fetching data...')
+		console.log('🔍 Testing function imports:', { fetchTracks, fetchGoldSites })
 		
 		try {
 			console.log('🔍 About to call fetchTracks and fetchGoldSites...')
+			
+			// Test individual calls
+			console.log('🔍 Testing fetchTracks individually...')
+			const tracksTest = await fetchTracks()
+			console.log('📊 fetchTracks result:', tracksTest)
+			
+			console.log('🔍 Testing fetchGoldSites individually...')
+			const goldSitesTest = await fetchGoldSites()
+			console.log('📊 fetchGoldSites result:', goldSitesTest)
+			
 			const [tracksData, goldSitesData] = await Promise.all([
 				fetchTracks(),
 				fetchGoldSites()
