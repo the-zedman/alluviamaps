@@ -166,6 +166,7 @@ function addTracksLayerInternal(tracks: Track[]) {
 
   console.log('🗺️ addTracksLayerInternal - map bounds:', map.getBounds())
   console.log('🗺️ addTracksLayerInternal - map center:', map.getCenter())
+  console.log('🗺️ addTracksLayerInternal - tracks data:', tracks)
 
   // Remove existing layer if it exists
   if (map.getLayer(LAYER_IDS.TRACKS)) {
@@ -198,6 +199,7 @@ function addTracksLayerInternal(tracks: Track[]) {
   }
 
   console.log('📊 Tracks GeoJSON:', tracksGeoJSON)
+  console.log('📊 Tracks coordinates:', tracks.map(t => t.coordinates))
 
   try {
     // Add source
@@ -415,9 +417,14 @@ function addGoldSitesLayerInternal(goldSites: GoldSite[]) {
 export function toggleLayer(layerId: string, visible: boolean) {
   if (!map) return
   
+  console.log(`🔧 toggleLayer called: ${layerId} -> ${visible}`)
+  
   const layer = map.getLayer(layerId)
   if (layer) {
     map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none')
+    console.log(`✅ Layer ${layerId} visibility set to: ${visible ? 'visible' : 'none'}`)
+  } else {
+    console.log(`❌ Layer ${layerId} not found`)
   }
 }
 
@@ -458,5 +465,19 @@ export function debugLayers() {
     })
   } else {
     console.log('  No layers found')
+  }
+  
+  // Check specific layers we're looking for
+  console.log('🔍 Checking specific layers:')
+  console.log(`  tracks-layer exists: ${map.getLayer('tracks-layer') ? 'YES' : 'NO'}`)
+  console.log(`  gold-sites-symbols exists: ${map.getLayer('gold-sites-symbols') ? 'YES' : 'NO'}`)
+  console.log(`  gold-sites-labels exists: ${map.getLayer('gold-sites-labels') ? 'YES' : 'NO'}`)
+  
+  // Check layer visibility
+  if (map.getLayer('tracks-layer')) {
+    console.log(`  tracks-layer visibility: ${map.getLayoutProperty('tracks-layer', 'visibility')}`)
+  }
+  if (map.getLayer('gold-sites-symbols')) {
+    console.log(`  gold-sites-symbols visibility: ${map.getLayoutProperty('gold-sites-symbols', 'visibility')}`)
   }
 } 
