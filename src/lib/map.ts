@@ -367,6 +367,8 @@ export function setLayerOpacity(layerId: string, opacity: number) {
       map.setPaintProperty(layerId, 'line-opacity', opacity)
     } else if (layer.type === 'circle') {
       map.setPaintProperty(layerId, 'circle-opacity', opacity)
+      // Also update stroke opacity for gold markers
+      map.setPaintProperty(layerId, 'circle-stroke-opacity', opacity)
     } else if (layer.type === 'symbol') {
       map.setPaintProperty(layerId, 'icon-opacity', opacity)
       map.setPaintProperty(layerId, 'text-opacity', opacity)

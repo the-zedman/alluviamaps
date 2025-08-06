@@ -10,6 +10,12 @@
   export let goldSitesOpacity = 1.0
   export let colorScheme = 'default' // default, historical, accessibility
   
+  // Collapsible state - default to collapsed
+  let expandedSections = {
+    tracks: false,
+    'gold-sites': false
+  }
+  
   // Color schemes
   const colorSchemes = {
     default: {
@@ -81,6 +87,11 @@
     colorScheme = scheme
     dispatch('colorSchemeChange', { scheme })
   }
+  
+  // Handle section toggle
+  function toggleSection(sectionId: string) {
+    expandedSections[sectionId] = !expandedSections[sectionId]
+  }
 
 
 </script>
@@ -115,11 +126,14 @@
   </div>
   
   <!-- Layer Groups -->
-  <div class="space-y-4">
+  <div class="space-y-2">
     {#each layerGroups as group}
-      <div class="border border-sediment-200 rounded-lg p-3">
-        <!-- Layer Header -->
-        <div class="flex items-center justify-between mb-2">
+      <div class="border border-sediment-200 rounded-lg">
+        <!-- Collapsible Header -->
+        <button 
+          class="w-full p-3 flex items-center justify-between hover:bg-sediment-50 transition-colors"
+          on:click={(e) => { e.stopPropagation(); toggleSection(group.id); }}
+        >
           <div class="flex items-center space-x-2">
             <div 
               class="w-4 h-4 rounded-full border-2 border-white shadow-sm"
@@ -127,40 +141,57 @@
             ></div>
             <span class="text-sm font-medium text-sediment-900">{group.name}</span>
           </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-                         <input 
-               type="checkbox" 
-               checked={group.id === 'tracks' ? showTracks : showGoldSites}
-               on:change={() => toggleLayer(group.id)}
-               on:click={(e) => e.stopPropagation()}
-               on:mousedown={(e) => e.stopPropagation()}
-               class="sr-only peer"
-             />
-            <div class="w-9 h-5 bg-sediment-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-alluvia-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-alluvia-600"></div>
-          </label>
-        </div>
-        
-        <!-- Layer Description -->
-        <p class="text-xs text-sediment-600 mb-3">{group.description}</p>
-        
-        <!-- Opacity Slider -->
-        <div class="space-y-2">
-          <div class="flex justify-between text-xs text-sediment-600">
-            <span>Opacity</span>
-            <span>{Math.round((group.id === 'tracks' ? tracksOpacity : goldSitesOpacity) * 100)}%</span>
+          <div class="flex items-center space-x-2">
+            <!-- Layer Toggle -->
+            <label class="relative inline-flex items-center cursor-pointer" on:click={(e) => e.stopPropagation()}>
+              <input 
+                type="checkbox" 
+                checked={group.id === 'tracks' ? showTracks : showGoldSites}
+                on:change={() => toggleLayer(group.id)}
+                on:click={(e) => e.stopPropagation()}
+                on:mousedown={(e) => e.stopPropagation()}
+                class="sr-only peer"
+              />
+              <div class="w-9 h-5 bg-sediment-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-alluvia-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-alluvia-600"></div>
+            </label>
+            <!-- Expand/Collapse Icon -->
+            <svg 
+              class="w-4 h-4 text-sediment-400 transition-transform {expandedSections[group.id] ? 'rotate-180' : ''}" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
           </div>
-                     <input
-             type="range"
-             min="0"
-             max="1"
-             step="0.1"
-             value={group.id === 'tracks' ? tracksOpacity : goldSitesOpacity}
-             on:input={(e) => updateOpacity(group.id, parseFloat(e.target.value))}
-             on:click={(e) => e.stopPropagation()}
-             on:mousedown={(e) => e.stopPropagation()}
-             class="w-full h-2 bg-sediment-200 rounded-lg appearance-none cursor-pointer slider"
-           />
-        </div>
+        </button>
+        
+        <!-- Collapsible Content -->
+        {#if expandedSections[group.id]}
+          <div class="px-3 pb-3 border-t border-sediment-100">
+            <!-- Layer Description -->
+            <p class="text-xs text-sediment-600 mb-3 mt-2">{group.description}</p>
+            
+            <!-- Opacity Slider -->
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs text-sediment-600">
+                <span>Opacity</span>
+                <span>{Math.round((group.id === 'tracks' ? tracksOpacity : goldSitesOpacity) * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.1"
+                value={group.id === 'tracks' ? tracksOpacity : goldSitesOpacity}
+                on:input={(e) => updateOpacity(group.id, parseFloat(e.target.value))}
+                on:click={(e) => e.stopPropagation()}
+                on:mousedown={(e) => e.stopPropagation()}
+                class="w-full h-2 bg-sediment-200 rounded-lg appearance-none cursor-pointer slider"
+              />
+            </div>
+          </div>
+        {/if}
       </div>
     {/each}
   </div>
