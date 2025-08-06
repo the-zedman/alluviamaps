@@ -116,6 +116,11 @@
 	<!-- Enhanced Map Legend & Controls -->
 	<div class="absolute top-24 left-4 z-20">
 		{#if showLegend}
+			<!-- Backdrop to handle clicks outside the legend -->
+			<div 
+				class="fixed inset-0 z-10" 
+				on:click={() => showLegend = false}
+			></div>
 			<MapLegend
 				bind:showTracks
 				bind:showGoldSites
@@ -128,7 +133,7 @@
 				on:goldSitesOpacity={(e) => goldSitesOpacity = e.detail.opacity}
 				on:colorSchemeChange={(e) => colorScheme = e.detail.scheme}
 				on:showAll={() => { showTracks = true; showGoldSites = true }}
-				on:hideAll={() => { showTracks = false; showGoldSites = false }}
+				on:hideAll={() => { showGoldSites = false; showTracks = false }}
 				on:close={() => showLegend = false}
 			/>
 		{:else}

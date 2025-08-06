@@ -71,6 +71,7 @@
 
   // Handle close button click
   function handleClose(event: MouseEvent) {
+    event.preventDefault()
     event.stopPropagation()
     dispatch('close')
   }

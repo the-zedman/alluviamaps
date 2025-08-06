@@ -362,8 +362,15 @@ export function setLayerOpacity(layerId: string, opacity: number) {
   
   const layer = map.getLayer(layerId)
   if (layer) {
-    map.setPaintProperty(layerId, 'circle-opacity', opacity)
-    map.setPaintProperty(layerId, 'line-opacity', opacity)
+    // Update opacity based on layer type
+    if (layer.type === 'line') {
+      map.setPaintProperty(layerId, 'line-opacity', opacity)
+    } else if (layer.type === 'circle') {
+      map.setPaintProperty(layerId, 'circle-opacity', opacity)
+    } else if (layer.type === 'symbol') {
+      map.setPaintProperty(layerId, 'icon-opacity', opacity)
+      map.setPaintProperty(layerId, 'text-opacity', opacity)
+    }
   }
 }
 
@@ -389,7 +396,7 @@ export function updateColorScheme(scheme: string) {
     }
   }
   
-  const colors = colorSchemes[scheme]
+  const colors = colorSchemes[scheme as keyof typeof colorSchemes]
   
   // Update tracks layer color
   if (map.getLayer('tracks-layer')) {
