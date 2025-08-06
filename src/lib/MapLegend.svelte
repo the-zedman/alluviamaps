@@ -295,4 +295,6 @@
     cursor: pointer;
     border: none;
   }
-</style>
+</div>
+
+<style>
