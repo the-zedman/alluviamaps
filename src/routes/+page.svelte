@@ -123,20 +123,21 @@
 			></div>
 			<div class="relative z-20" on:click={(e) => e.stopPropagation()}>
 				<MapLegend
-				bind:showTracks
-				bind:showGoldSites
-				bind:tracksOpacity
-				bind:goldSitesOpacity
-				bind:colorScheme
-				on:tracksToggle={(e) => showTracks = e.detail.visible}
-				on:goldSitesToggle={(e) => showGoldSites = e.detail.visible}
-				on:tracksOpacity={(e) => tracksOpacity = e.detail.opacity}
-				on:goldSitesOpacity={(e) => goldSitesOpacity = e.detail.opacity}
-				on:colorSchemeChange={(e) => colorScheme = e.detail.scheme}
-				on:showAll={() => { showTracks = true; showGoldSites = true }}
-				on:hideAll={() => { showGoldSites = false; showTracks = false }}
-				on:close={() => showLegend = false}
-			/>
+					bind:showTracks
+					bind:showGoldSites
+					bind:tracksOpacity
+					bind:goldSitesOpacity
+					bind:colorScheme
+					on:tracksToggle={(e) => showTracks = e.detail.visible}
+					on:goldSitesToggle={(e) => showGoldSites = e.detail.visible}
+					on:tracksOpacity={(e) => tracksOpacity = e.detail.opacity}
+					on:goldSitesOpacity={(e) => goldSitesOpacity = e.detail.opacity}
+					on:colorSchemeChange={(e) => colorScheme = e.detail.scheme}
+					on:showAll={() => { showTracks = true; showGoldSites = true }}
+					on:hideAll={() => { showGoldSites = false; showTracks = false }}
+					on:close={() => showLegend = false}
+				/>
+			</div>
 		{:else}
 			<button
 				class="bg-white rounded-lg shadow-lg p-3 hover:shadow-xl transition-shadow"
