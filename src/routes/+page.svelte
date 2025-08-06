@@ -121,7 +121,8 @@
 				class="fixed inset-0 z-10" 
 				on:click={() => showLegend = false}
 			></div>
-			<MapLegend
+			<div class="relative z-20" on:click={(e) => e.stopPropagation()}>
+				<MapLegend
 				bind:showTracks
 				bind:showGoldSites
 				bind:tracksOpacity

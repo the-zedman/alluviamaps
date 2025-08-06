@@ -85,7 +85,7 @@
 
 </script>
 
-<div class="bg-white rounded-lg shadow-lg p-4 w-80 max-h-96 overflow-y-auto" on:click={(e) => e.stopPropagation()}>
+<div class="bg-white rounded-lg shadow-lg p-4 w-80 max-h-96 overflow-y-auto" on:click={(e) => e.stopPropagation()} on:mousedown={(e) => e.stopPropagation()}>
   <!-- Header -->
   <div class="flex items-center justify-between mb-4">
     <h3 class="text-lg font-semibold text-sediment-900">Map Layers</h3>
@@ -104,10 +104,10 @@
     <label class="block text-sm font-medium text-sediment-700 mb-2">Color Scheme</label>
     <div class="flex space-x-2">
       {#each Object.keys(colorSchemes) as scheme}
-        <button
-          class="px-3 py-1 text-xs rounded-full border transition-colors {colorScheme === scheme ? 'bg-alluvia-100 border-alluvia-300 text-alluvia-700' : 'bg-white border-sediment-300 text-sediment-600 hover:border-sediment-400'}"
-          on:click={() => changeColorScheme(scheme)}
-        >
+                 <button
+           class="px-3 py-1 text-xs rounded-full border transition-colors {colorScheme === scheme ? 'bg-alluvia-100 border-alluvia-300 text-alluvia-700' : 'bg-white border-sediment-300 text-sediment-600 hover:border-sediment-400'}"
+           on:click={(e) => { e.stopPropagation(); changeColorScheme(scheme); }}
+         >
           {scheme.charAt(0).toUpperCase() + scheme.slice(1)}
         </button>
       {/each}
@@ -128,12 +128,14 @@
             <span class="text-sm font-medium text-sediment-900">{group.name}</span>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
-            <input 
-              type="checkbox" 
-              checked={group.id === 'tracks' ? showTracks : showGoldSites}
-              on:change={() => toggleLayer(group.id)}
-              class="sr-only peer"
-            />
+                         <input 
+               type="checkbox" 
+               checked={group.id === 'tracks' ? showTracks : showGoldSites}
+               on:change={() => toggleLayer(group.id)}
+               on:click={(e) => e.stopPropagation()}
+               on:mousedown={(e) => e.stopPropagation()}
+               class="sr-only peer"
+             />
             <div class="w-9 h-5 bg-sediment-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-alluvia-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-alluvia-600"></div>
           </label>
         </div>
@@ -147,16 +149,17 @@
             <span>Opacity</span>
             <span>{Math.round((group.id === 'tracks' ? tracksOpacity : goldSitesOpacity) * 100)}%</span>
           </div>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
-            value={group.id === 'tracks' ? tracksOpacity : goldSitesOpacity}
-            on:input={(e) => updateOpacity(group.id, parseFloat(e.target.value))}
-            on:click={(e) => e.stopPropagation()}
-            class="w-full h-2 bg-sediment-200 rounded-lg appearance-none cursor-pointer slider"
-          />
+                     <input
+             type="range"
+             min="0"
+             max="1"
+             step="0.1"
+             value={group.id === 'tracks' ? tracksOpacity : goldSitesOpacity}
+             on:input={(e) => updateOpacity(group.id, parseFloat(e.target.value))}
+             on:click={(e) => e.stopPropagation()}
+             on:mousedown={(e) => e.stopPropagation()}
+             class="w-full h-2 bg-sediment-200 rounded-lg appearance-none cursor-pointer slider"
+           />
         </div>
       </div>
     {/each}
@@ -184,24 +187,26 @@
   <!-- Quick Actions -->
   <div class="mt-4 pt-4 border-t border-sediment-200">
     <div class="flex space-x-2">
-      <button
-        class="flex-1 px-3 py-2 text-xs bg-alluvia-50 text-alluvia-700 rounded-md hover:bg-alluvia-100 transition-colors"
-        on:click={() => {
-          showTracks = true
-          showGoldSites = true
-          dispatch('showAll')
-        }}
-      >
+             <button
+         class="flex-1 px-3 py-2 text-xs bg-alluvia-50 text-alluvia-700 rounded-md hover:bg-alluvia-100 transition-colors"
+         on:click={(e) => { 
+           e.stopPropagation(); 
+           showTracks = true; 
+           showGoldSites = true; 
+           dispatch('showAll'); 
+         }}
+       >
         Show All
       </button>
-      <button
-        class="flex-1 px-3 py-2 text-xs bg-sediment-50 text-sediment-700 rounded-md hover:bg-sediment-100 transition-colors"
-        on:click={() => {
-          showTracks = false
-          showGoldSites = false
-          dispatch('hideAll')
-        }}
-      >
+             <button
+         class="flex-1 px-3 py-2 text-xs bg-sediment-50 text-sediment-700 rounded-md hover:bg-sediment-100 transition-colors"
+         on:click={(e) => { 
+           e.stopPropagation(); 
+           showTracks = false; 
+           showGoldSites = false; 
+           dispatch('hideAll'); 
+         }}
+       >
         Hide All
       </button>
     </div>
