@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte'
+  import { createEventDispatcher } from 'svelte'
   
   const dispatch = createEventDispatcher()
-  
-  let legendElement: HTMLDivElement
   
   // Props
   export let showTracks = true
@@ -84,23 +82,10 @@
     dispatch('colorSchemeChange', { scheme })
   }
 
-  // Handle clicks outside the legend
-  function handleClickOutside(event: MouseEvent) {
-    if (legendElement && !legendElement.contains(event.target as Node)) {
-      dispatch('close')
-    }
-  }
 
-  onMount(() => {
-    document.addEventListener('click', handleClickOutside)
-  })
-
-  onDestroy(() => {
-    document.removeEventListener('click', handleClickOutside)
-  })
 </script>
 
-<div bind:this={legendElement} class="bg-white rounded-lg shadow-lg p-4 w-80 max-h-96 overflow-y-auto" on:click={(e) => e.stopPropagation()}>
+<div class="bg-white rounded-lg shadow-lg p-4 w-80 max-h-96 overflow-y-auto" on:click={(e) => e.stopPropagation()}>
   <!-- Header -->
   <div class="flex items-center justify-between mb-4">
     <h3 class="text-lg font-semibold text-sediment-900">Map Layers</h3>
