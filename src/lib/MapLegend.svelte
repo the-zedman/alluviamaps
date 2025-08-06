@@ -68,6 +68,12 @@
       dispatch('goldSitesOpacity', { opacity: value })
     }
   }
+
+  // Handle close button click
+  function handleClose(event: MouseEvent) {
+    event.stopPropagation()
+    dispatch('close')
+  }
   
   // Handle color scheme change
   function changeColorScheme(scheme: string) {
@@ -76,13 +82,13 @@
   }
 </script>
 
-<div class="bg-white rounded-lg shadow-lg p-4 w-80 max-h-96 overflow-y-auto">
+<div class="bg-white rounded-lg shadow-lg p-4 w-80 max-h-96 overflow-y-auto" on:click={(e) => e.stopPropagation()}>
   <!-- Header -->
   <div class="flex items-center justify-between mb-4">
     <h3 class="text-lg font-semibold text-sediment-900">Map Layers</h3>
     <button 
       class="text-sediment-400 hover:text-sediment-600"
-      on:click={() => dispatch('close')}
+      on:click={handleClose}
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -145,6 +151,7 @@
             step="0.1"
             value={group.id === 'tracks' ? tracksOpacity : goldSitesOpacity}
             on:input={(e) => updateOpacity(group.id, parseFloat(e.target.value))}
+            on:click={(e) => e.stopPropagation()}
             class="w-full h-2 bg-sediment-200 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
