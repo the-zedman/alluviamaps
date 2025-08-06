@@ -13,7 +13,8 @@
   // Collapsible state - default to collapsed
   let expandedSections = {
     tracks: false,
-    'gold-sites': false
+    'gold-sites': false,
+    'color-scheme': false
   }
   
   // Color schemes
@@ -110,20 +111,7 @@
     </button>
   </div>
   
-  <!-- Color Scheme Selector -->
-  <div class="mb-4">
-    <label class="block text-sm font-medium text-sediment-700 mb-2">Color Scheme</label>
-    <div class="flex space-x-2">
-      {#each Object.keys(colorSchemes) as scheme}
-                 <button
-           class="px-3 py-1 text-xs rounded-full border transition-colors {colorScheme === scheme ? 'bg-alluvia-100 border-alluvia-300 text-alluvia-700' : 'bg-white border-sediment-300 text-sediment-600 hover:border-sediment-400'}"
-           on:click={(e) => { e.stopPropagation(); changeColorScheme(scheme); }}
-         >
-          {scheme.charAt(0).toUpperCase() + scheme.slice(1)}
-        </button>
-      {/each}
-    </div>
-  </div>
+
   
   <!-- Layer Groups -->
   <div class="space-y-2">
@@ -194,26 +182,71 @@
         {/if}
       </div>
     {/each}
-  </div>
-  
-  <!-- Legend -->
-  <div class="mt-4 pt-4 border-t border-sediment-200">
-    <h4 class="text-sm font-medium text-sediment-900 mb-2">Legend</h4>
-    <div class="space-y-2 text-xs">
-      <div class="flex items-center space-x-2">
-        <div class="w-3 h-3 rounded-full" style="background-color: {colorSchemes[colorScheme].tracks}"></div>
-        <span class="text-sediment-700">Walking Trail</span>
-      </div>
-      <div class="flex items-center space-x-2">
-        <div class="w-3 h-3 rounded-full" style="background-color: {colorSchemes[colorScheme].goldSites}"></div>
-        <span class="text-sediment-700">Gold Mining Site</span>
-      </div>
-      <div class="flex items-center space-x-2">
-        <div class="w-3 h-3 rounded-full" style="background-color: {colorSchemes[colorScheme].goldFound}"></div>
-        <span class="text-sediment-700">Gold Found Here</span>
-      </div>
+    
+    <!-- Color Scheme & Legend Section -->
+    <div class="border border-sediment-200 rounded-lg">
+      <!-- Collapsible Header -->
+      <button 
+        class="w-full p-3 flex items-center justify-between hover:bg-sediment-50 transition-colors"
+        on:click={(e) => { e.stopPropagation(); toggleSection('color-scheme'); }}
+      >
+        <div class="flex items-center space-x-2">
+          <svg class="w-4 h-4 text-sediment-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17v.01"></path>
+          </svg>
+          <span class="text-sm font-medium text-sediment-900">Color Scheme & Legend</span>
+        </div>
+        <!-- Expand/Collapse Icon -->
+        <svg 
+          class="w-4 h-4 text-sediment-400 transition-transform {expandedSections['color-scheme'] ? 'rotate-180' : ''}" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      
+      <!-- Collapsible Content -->
+      {#if expandedSections['color-scheme']}
+        <div class="px-3 pb-3 border-t border-sediment-100">
+          <!-- Color Scheme Selector -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-sediment-700 mb-2">Color Scheme</label>
+            <div class="flex space-x-2">
+              {#each Object.keys(colorSchemes) as scheme}
+                <button
+                  class="px-3 py-1 text-xs rounded-full border transition-colors {colorScheme === scheme ? 'bg-alluvia-100 border-alluvia-300 text-alluvia-700' : 'bg-white border-sediment-300 text-sediment-600 hover:border-sediment-400'}"
+                  on:click={(e) => { e.stopPropagation(); changeColorScheme(scheme); }}
+                >
+                  {scheme.charAt(0).toUpperCase() + scheme.slice(1)}
+                </button>
+              {/each}
+            </div>
+          </div>
+          
+          <!-- Legend -->
+          <div>
+            <h4 class="text-sm font-medium text-sediment-900 mb-2">Legend</h4>
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 rounded-full" style="background-color: {colorSchemes[colorScheme].tracks}"></div>
+                <span class="text-sediment-700">Walking Trail</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 rounded-full" style="background-color: {colorSchemes[colorScheme].goldSites}"></div>
+                <span class="text-sediment-700">Gold Mining Site</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 rounded-full" style="background-color: {colorSchemes[colorScheme].goldFound}"></div>
+                <span class="text-sediment-700">Gold Found Here</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
     </div>
-  </div>
+
   
   <!-- Quick Actions -->
   <div class="mt-4 pt-4 border-t border-sediment-200">
