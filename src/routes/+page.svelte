@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import Map from '$lib/Map.svelte'
+	import MapLegend from '$lib/MapLegend.svelte'
 	import { fetchTracks, fetchGoldSites } from '$lib/data'
 	
 	import type { Track, GoldSite } from '$lib/supabase'
@@ -10,6 +11,10 @@
 	let loading = true
 	let showTracks = true
 	let showGoldSites = true
+	let tracksOpacity = 1.0
+	let goldSitesOpacity = 1.0
+	let colorScheme = 'default'
+	let showLegend = false
 	let searchQuery = ''
 
 	onMount(async () => {
@@ -99,35 +104,44 @@
 				{goldSites} 
 				{showTracks} 
 				{showGoldSites}
+				{tracksOpacity}
+				{goldSitesOpacity}
+				{colorScheme}
 				center={[144.2802, -36.7589]}
 				zoom={10}
 			/>
 		{/if}
 	</div>
 
-	<!-- Layer Controls -->
+	<!-- Enhanced Map Legend & Controls -->
 	<div class="absolute top-24 left-4 z-20">
-		<div class="bg-white rounded-lg shadow-lg p-4 space-y-3">
-			<h3 class="text-sm font-semibold text-sediment-900 mb-2">Layers</h3>
-			
-			<label class="flex items-center space-x-2 cursor-pointer">
-				<input 
-					type="checkbox" 
-					bind:checked={showTracks}
-					class="rounded border-sediment-300 text-alluvia-600 focus:ring-alluvia-500"
-				/>
-				<span class="text-sm text-sediment-700">Tracks</span>
-			</label>
-			
-			<label class="flex items-center space-x-2 cursor-pointer">
-				<input 
-					type="checkbox" 
-					bind:checked={showGoldSites}
-					class="rounded border-sediment-300 text-alluvia-600 focus:ring-alluvia-500"
-				/>
-				<span class="text-sm text-sediment-700">Gold Sites</span>
-			</label>
-		</div>
+		{#if showLegend}
+			<MapLegend
+				bind:showTracks
+				bind:showGoldSites
+				bind:tracksOpacity
+				bind:goldSitesOpacity
+				bind:colorScheme
+				on:tracksToggle={(e) => showTracks = e.detail.visible}
+				on:goldSitesToggle={(e) => showGoldSites = e.detail.visible}
+				on:tracksOpacity={(e) => tracksOpacity = e.detail.opacity}
+				on:goldSitesOpacity={(e) => goldSitesOpacity = e.detail.opacity}
+				on:colorSchemeChange={(e) => colorScheme = e.detail.scheme}
+				on:showAll={() => { showTracks = true; showGoldSites = true }}
+				on:hideAll={() => { showTracks = false; showGoldSites = false }}
+				on:close={() => showLegend = false}
+			/>
+		{:else}
+			<button
+				class="bg-white rounded-lg shadow-lg p-3 hover:shadow-xl transition-shadow"
+				on:click={() => showLegend = true}
+				title="Map Layers & Legend"
+			>
+				<svg class="w-6 h-6 text-sediment-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m-6 3l6-3"></path>
+				</svg>
+			</button>
+		{/if}
 	</div>
 
 	<!-- Info Panel -->

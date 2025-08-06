@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
-  import { initializeMap, addTracksLayer, addGoldSitesLayer, cleanupMap, toggleLayer, flyToLocation } from './map'
+  import { initializeMap, addTracksLayer, addGoldSitesLayer, cleanupMap, toggleLayer, setLayerOpacity, updateColorScheme, flyToLocation } from './map'
   import type { Track, GoldSite } from './supabase'
   import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -9,6 +9,9 @@
   export let goldSites: GoldSite[] = []
   export let showTracks = true
   export let showGoldSites = true
+  export let tracksOpacity = 1.0
+  export let goldSitesOpacity = 1.0
+  export let colorScheme = 'default'
   export let center: [number, number] = [-36.7589, 144.2802] // Bendigo
   export let zoom = 10
 
@@ -21,15 +24,25 @@
 
   // Handle layer visibility changes
   $: if (map && tracksAdded) {
-    setTimeout(() => {
-      toggleLayer('tracks-layer', showTracks)
-    }, 100) // Small delay to ensure layer is fully added
+    toggleLayer('tracks-layer', showTracks)
   }
 
   $: if (map && goldSitesAdded) {
-    setTimeout(() => {
-      toggleLayer('gold-sites-symbols', showGoldSites)
-    }, 100) // Small delay to ensure layer is fully added
+    toggleLayer('gold-sites-symbols', showGoldSites)
+  }
+
+  // Handle opacity changes
+  $: if (map && tracksAdded) {
+    setLayerOpacity('tracks-layer', tracksOpacity)
+  }
+
+  $: if (map && goldSitesAdded) {
+    setLayerOpacity('gold-sites-symbols', goldSitesOpacity)
+  }
+
+  // Handle color scheme changes
+  $: if (map && (tracksAdded || goldSitesAdded)) {
+    updateColorScheme(colorScheme)
   }
 
   // Handle tracks data changes - only add once

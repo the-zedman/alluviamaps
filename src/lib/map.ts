@@ -356,6 +356,56 @@ export function toggleLayer(layerId: string, visible: boolean) {
   }
 }
 
+// Set layer opacity
+export function setLayerOpacity(layerId: string, opacity: number) {
+  if (!map) return
+  
+  const layer = map.getLayer(layerId)
+  if (layer) {
+    map.setPaintProperty(layerId, 'circle-opacity', opacity)
+    map.setPaintProperty(layerId, 'line-opacity', opacity)
+  }
+}
+
+// Update color scheme
+export function updateColorScheme(scheme: string) {
+  if (!map) return
+  
+  const colorSchemes = {
+    default: {
+      tracks: '#3b82f6',
+      goldSites: '#fbbf24',
+      goldFound: '#f59e0b'
+    },
+    historical: {
+      tracks: '#8b5cf6',
+      goldSites: '#dc2626',
+      goldFound: '#b91c1c'
+    },
+    accessibility: {
+      tracks: '#059669',
+      goldSites: '#dc2626',
+      goldFound: '#7c2d12'
+    }
+  }
+  
+  const colors = colorSchemes[scheme]
+  
+  // Update tracks layer color
+  if (map.getLayer('tracks-layer')) {
+    map.setPaintProperty('tracks-layer', 'line-color', colors.tracks)
+  }
+  
+  // Update gold sites layer color
+  if (map.getLayer('gold-sites-symbols')) {
+    map.setPaintProperty('gold-sites-symbols', 'circle-color', [
+      'case',
+      ['==', ['get', 'gold_found'], true], colors.goldFound,
+      colors.goldSites
+    ])
+  }
+}
+
 // Fly to location
 export function flyToLocation(coordinates: [number, number], zoom: number = 14) {
   if (!map) return
